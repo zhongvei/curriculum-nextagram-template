@@ -3,4 +3,14 @@ import peewee as pw
 
 
 class User(BaseModel):
-    name = pw.CharField(unique=False)
+    email = pw.CharField(unique=True)
+    name = pw.CharField(unique=True)
+    password = pw.CharField()
+
+    def validate(self):
+        duplicate_name = User.get_or_none(User.name == self.name)
+        duplicate_email = User.get_or_none(User.email == self.email)
+        if duplicate_name:
+            self.errors.append('Username not unique')
+        if duplicate_email:
+            self.errors.append('Email not unique')
