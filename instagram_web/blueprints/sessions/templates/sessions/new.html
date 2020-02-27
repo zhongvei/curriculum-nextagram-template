@@ -4,15 +4,18 @@
 <div class="container">
     {% if access == True %}
     <div class="alert alert-success">
-        <strong>Success!</strong> User log in.
+        <strong>Success!</strong> {{message}}
     </div>
     {% elif access == False %}
     <div class="alert alert-danger">
-        <strong>Fail! </strong> Wrong email
+        <strong>Fail! </strong> {{message}}
     </div>
     {% endif %}
-    <h1>User Log</h1>
-    <form method="POST" action="{{url_for('users.login_check')}}">
+    {% if current_user.is_authenticated %}
+    Hi {{ current_user.name }}!
+    {% endif %}
+    <h1>User Login</h1>
+    <form method="POST" action="{{url_for('sessions.create')}}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
@@ -25,7 +28,6 @@
                 name='password'>
         </div>
         <button id='submitbtn' type="submit" class="btn btn-primary">Submit</button>
-
 </div>
 </form>
 </div>

@@ -7,6 +7,12 @@ class User(BaseModel):
     name = pw.CharField(unique=True)
     password = pw.CharField()
 
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
     def validate(self):
         duplicate_name = User.get_or_none(User.name == self.name)
         duplicate_email = User.get_or_none(User.email == self.email)
