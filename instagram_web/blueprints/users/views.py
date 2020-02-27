@@ -26,13 +26,10 @@ def create():
         success = False
         return render_template('users/new.html', message = success, errors=user.errors)
     
-    
-
-
 @users_blueprint.route('/<username>', methods=["GET"])
 def show(username):
     pass
-
+ 
 
 @users_blueprint.route('/', methods=["GET"])
 def index():
