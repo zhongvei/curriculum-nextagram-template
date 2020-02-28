@@ -23,6 +23,7 @@ def new():
 
 @sessions_blueprint.route('/', methods=['POST'])
 def create():
+    
     if current_user.is_authenticated:
         return render_template('sessions/new.html')
     email = request.form.get('email')
@@ -32,7 +33,7 @@ def create():
     if user:
         if check_password_hash(user.password, password):
             login_user(user)
-            return render_template('sessions/new.html',access=True)
+            return redirect(url_for('users.show', username = current_user.name))
         else:
             return render_template('sessions/new.html',access=False, message='Invalid Password')
     else:

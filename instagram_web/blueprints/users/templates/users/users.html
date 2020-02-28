@@ -1,0 +1,19 @@
+{% extends "_layout.html" %}
+
+{% block content %}
+<div class="container">
+    {% if user %}
+    <p>{{user.name}}</p>
+    <p>{{user.email}}</p>
+    {% if current_user.id == user.id %}
+    <a href="{{url_for('users.edit', id = current_user.id)}}">Edit profile</a>
+    {% endif %}
+    {% else %}
+    <h1>no such user :(</h1>
+    {% endif %}
+
+</div>
+</form>
+</div>
+
+{% endblock %}

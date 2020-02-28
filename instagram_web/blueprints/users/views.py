@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from models.user import User
 from werkzeug.security import generate_password_hash
-
+from flask_login import login_user, current_user 
 
 users_blueprint = Blueprint('users',
                             __name__,
@@ -19,14 +19,16 @@ def create():
     user = User(email=request.form.get('email'), name=request.form.get('username'), password=hashed_password)
     if user.save():
         success = True
-        return render_template('users/new.html', message = success)
+        login_user(user)
+        return redirect(url_for('home'))
     else:
         success = False
         return render_template('users/new.html', message = success, errors=user.errors)
     
 @users_blueprint.route('/<username>', methods=["GET"])
 def show(username):
-    pass
+    user = User.get_or_none(User.name == username)
+    return render_template('users/users.html',user = user)
  
 
 @users_blueprint.route('/', methods=["GET"])
@@ -36,9 +38,17 @@ def index():
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
 def edit(id):
-    pass
+    if str(current_user.id) == id:
+        return render_template('users/edit.html')
+    return current_user.id
 
 
 @users_blueprint.route('/<id>', methods=['POST'])
 def update(id):
-    pass
+    user = User.get_or_none(User.id == id)
+    email = request.form.get('email')
+    name = request.form.get('username')
+    user.email = email
+    user.name = name
+    user.save()
+    return redirect(url_for('users.edit', id = user.id))
