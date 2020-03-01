@@ -5,6 +5,7 @@
     {% if user %}
     <p>{{user.name}}</p>
     <p>{{user.email}}</p>
+    <img src="https://pleaseletmeusethisbucketname.s3-ap-southeast-1.amazonaws.com/C34h-HpVMAEgAGc.jpg" alt=""></img>
     {% if current_user.id == user.id %}
     <a href="{{url_for('users.edit', id = current_user.id)}}">Edit profile</a>
     {% endif %}

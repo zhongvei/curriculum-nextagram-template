@@ -1,7 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from models.user import User
 from werkzeug.security import generate_password_hash
-from flask_login import login_user, current_user 
+from werkzeug.utils import secure_filename
+
+from flask_login import login_user, current_user, login_required
+from helpers import *
+
 
 users_blueprint = Blueprint('users',
                             __name__,
@@ -37,6 +41,7 @@ def index():
 
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
+@login_required
 def edit(id):
     if str(current_user.id) == id:
         return render_template('users/edit.html')
@@ -44,6 +49,7 @@ def edit(id):
 
 
 @users_blueprint.route('/<id>', methods=['POST'])
+@login_required
 def update(id):
     user = User.get_or_none(User.id == id)
     email = request.form.get('email')
@@ -51,4 +57,24 @@ def update(id):
     user.email = email
     user.name = name
     user.save()
-    return redirect(url_for('users.edit', id = user.id))
+    return redirect(url_for('users.edit', id=user.id))
+    
+@users_blueprint.route('/upload/new', methods =["GET"])
+def upload():
+    return render_template('/users/profile.html')
+
+@users_blueprint.route('/upload', methods =["POST"])
+def upload_img():
+    file = request.files["user_file"]
+    if file :
+        file.filename = secure_filename(file.filename)
+        output   	  = upload_file_to_s3(file)
+        if str(output) == 'None':
+            return render_template('/users/profile.html')
+        else:
+            return redirect(url_for('home'))
+    else:
+        return redirect("/")
+
+
+    return render_template('/users/profile.html')

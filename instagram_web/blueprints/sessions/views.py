@@ -43,3 +43,4 @@ def create():
 def logout():
     logout_user()
     return render_template('sessions/new.html')
+
