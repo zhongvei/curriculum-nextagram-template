@@ -4,6 +4,7 @@ from instagram_web.blueprints.users.views import users_blueprint
 from instagram_web.blueprints.sessions.views import sessions_blueprint
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
+from models.user import User
 
 assets = Environment(app)
 assets.register(bundles)
@@ -13,7 +14,8 @@ app.register_blueprint(sessions_blueprint, url_prefix='/sessions')
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+    users = User().select()
+    return render_template('home.html',users = users)
 
 @app.errorhandler(500)
 def internal_server_error(e):
