@@ -1,14 +1,20 @@
 from models.base_model import BaseModel
 import peewee as pw
 from flask_login import current_user
+AWS_S3_DOMAIN = 'https://pleaseletmeusethisbucketname.s3-ap-southeast-1.amazonaws.com/'
 
 
 class User(BaseModel):
     email = pw.CharField(unique=True)
     name = pw.CharField(unique=True)
     password = pw.CharField()
-    picture = pw.CharField(null = True)
+    image_path = pw.CharField(default = '')
     
+    def profile_image_url(self):
+        if str(self.image_path) == '':
+            return AWS_S3_DOMAIN + 'empty.png'
+        return AWS_S3_DOMAIN + self.image_path
+
     def is_authenticated(self):
         return True
 

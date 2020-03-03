@@ -1,15 +1,17 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from models.user import User
+from models.user_images import Image
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
-from flask_login import login_user, current_user, login_required
+from flask_login import login_user, current_user, login_required, current_user
 from helpers import *
 
 
 users_blueprint = Blueprint('users',
                             __name__,
                             template_folder='templates')
+
 
 @users_blueprint.route('/new', methods=['GET'])
 def new():
@@ -32,8 +34,7 @@ def create():
 @users_blueprint.route('/<username>', methods=["GET"])
 def show(username):
     user = User.get_or_none(User.name == username)
-    return render_template('users/users.html',user = user)
- 
+    return render_template('users/users.html', user=user)
 
 @users_blueprint.route('/', methods=["GET"])
 def index():
@@ -48,6 +49,7 @@ def edit(id):
     return current_user.id
 
 
+
 @users_blueprint.route('/<id>', methods=['POST'])
 @login_required
 def update(id):
@@ -58,23 +60,34 @@ def update(id):
     user.name = name
     user.save()
     return redirect(url_for('users.edit', id=user.id))
-    
-@users_blueprint.route('/upload/new', methods =["GET"])
-def upload():
-    return render_template('/users/profile.html')
 
-@users_blueprint.route('/upload', methods =["POST"])
+@users_blueprint.route('/upload', methods=["POST"])
+@login_required
 def upload_img():
     file = request.files["user_file"]
-    if file :
-        file.filename = secure_filename(file.filename)
-        output   	  = upload_file_to_s3(file)
-        if str(output) == 'None':
-            return render_template('/users/profile.html')
+    user = User.get_or_none(User.id == current_user.id)
+    if user:
+        if file :
+            file.filename = secure_filename(file.filename)
+            output   	  = upload_file_to_s3(file)
+            if str(output) == 'None':
+                user.image_path = file.filename
+                user.save()
+                return redirect(url_for('home'))
+            else:
+                return redirect(url_for('home'))
         else:
-            return redirect(url_for('home'))
+            return redirect("/")
     else:
         return redirect("/")
-
-
     return render_template('/users/profile.html')
+
+@users_blueprint.route('/<username>/upload_my_image', methods= ['POST'])
+@login_required
+def upload_my_image(username):
+    file = request.files["user_file"]
+    user = User.get_or_none(User.id == current_user.id)
+    image = Image(image_path = file.filename, user_id = user.id)
+    upload_file_to_s3(file)
+    image.save()
+    return redirect(url_for('users.show', username = username))
