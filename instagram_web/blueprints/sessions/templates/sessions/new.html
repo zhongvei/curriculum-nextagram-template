@@ -2,18 +2,6 @@
 
 {% block content %}
 <div class="container">
-    {% if access == True %}
-    <div class="alert alert-success">
-        <strong>Success!</strong> {{message}}
-    </div>
-    {% elif access == False %}
-    <div class="alert alert-danger">
-        <strong>Fail! </strong> {{message}}
-    </div>
-    {% endif %}
-    {% if current_user.is_authenticated %}
-    Hi {{ current_user.name }}!
-    {% endif %}
     <h1>User Login</h1>
     <form method="POST" action="{{url_for('sessions.create')}}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -28,8 +16,7 @@
                 name='password'>
         </div>
         <button id='submitbtn' type="submit" class="btn btn-primary">Submit</button>
-</div>
-</form>
+    </form>
 </div>
 
 

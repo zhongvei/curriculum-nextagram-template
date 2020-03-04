@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.user import User
 from werkzeug.security import check_password_hash
 from flask_login import LoginManager, login_user, current_user, logout_user
@@ -18,14 +18,15 @@ def load_user(user_id):
 @sessions_blueprint.route('/new', methods=['GET'])
 def new():
     if current_user.is_authenticated:
-        return render_template('sessions/new.html')
+        flash(u'You have log in already', 'success')
+        return redirect(url_for('home'))
     return render_template('sessions/new.html')
 
 @sessions_blueprint.route('/', methods=['POST'])
 def create():
-    
     if current_user.is_authenticated:
-        return render_template('sessions/new.html')
+        flash(u'You have log in already', 'success')
+        return redirect(url_for('home'))
     email = request.form.get('email')
     password = request.form.get('password')
     user = User.get_or_none(User.email == email)
@@ -35,12 +36,15 @@ def create():
             login_user(user)
             return redirect(url_for('users.show', username = current_user.name))
         else:
-            return render_template('sessions/new.html',access=False, message='Invalid Password')
+            flash(u'Invalid Password, try again','danger')
+            return redirect(url_for('sessions.new'))
     else:
-        return render_template('sessions/new.html', access=False, message='Invalid email address')
+        flash(u'Invalid email address, try again','danger')
+        return redirect(url_for('sessions.new'))
 
 @sessions_blueprint.route('/logout')
 def logout():
     logout_user()
+    flash(u'Logged Out!','success')
     return render_template('sessions/new.html')
 

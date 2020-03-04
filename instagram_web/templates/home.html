@@ -12,9 +12,7 @@
   <h1>Homepage</h1>
   <div class="container">
     {% for user in users %}
-    {% for image in user.images %}
-    
-    
+    {% for image in user.images %}    
     <div class="card card-style">
       <div class="card-header" style="display: flex;flex-flow: row;">
         <div>
@@ -35,7 +33,9 @@
       {% if current_user.is_authenticated %}
       <div class="card">
         <div class="card-body">
-          <i class="fa fa-money" style="font-size:36px"></i>
+          <a href="{{url_for('donations.new', img_id = image.id)}}">
+            <i class="fa fa-money" style="font-size:36px"></i>
+          </a>
         </div>
       </div>
       {% endif %}

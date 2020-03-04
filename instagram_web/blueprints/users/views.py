@@ -1,11 +1,11 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.user import User
 from models.user_images import Image
 from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
 from flask_login import login_user, current_user, login_required, current_user
-from helpers import *
+from util.helpers import *
 
 
 users_blueprint = Blueprint('users',
@@ -24,12 +24,12 @@ def create():
     hashed_password = generate_password_hash(password)
     user = User(email=request.form.get('email'), name=request.form.get('username'), password=hashed_password)
     if user.save():
-        success = True
         login_user(user)
+        flash(u'User successfully created!','success')
         return redirect(url_for('home'))
     else:
-        success = False
-        return render_template('users/new.html', message = success, errors=user.errors)
+        flash(user.errors, 'danger')
+        return redirect(url_for('users.new'))
     
 @users_blueprint.route('/<username>', methods=["GET"])
 def show(username):
@@ -48,8 +48,6 @@ def edit(id):
         return render_template('users/edit.html')
     return current_user.id
 
-
-
 @users_blueprint.route('/<id>', methods=['POST'])
 @login_required
 def update(id):
@@ -58,7 +56,10 @@ def update(id):
     name = request.form.get('username')
     user.email = email
     user.name = name
-    user.save()
+    if not user.save():
+        flash(u"Temporary can't update your details!",'danger')
+        return redirect(url_for('users.edit', id=user.id))
+    flash(u'Successfully edit your new details!','success')
     return redirect(url_for('users.edit', id=user.id))
 
 @users_blueprint.route('/upload', methods=["POST"])
@@ -73,9 +74,11 @@ def upload_img():
             if str(output) == 'None':
                 user.image_path = file.filename
                 user.save()
-                return redirect(url_for('home'))
+                flash(u"You look good in your new profile picture",'success')
+                return redirect(url_for('users.edit',id = user.id))
             else:
-                return redirect(url_for('home'))
+                flash(u"Can't change your new profile picture",'danger')
+                return redirect(request.referrer)
         else:
             return redirect("/")
     else:
@@ -90,4 +93,5 @@ def upload_my_image(username):
     image = Image(image_path = file.filename, user_id = user.id)
     upload_file_to_s3(file)
     image.save()
+    flash(u'Image saved successfully!' ,'success')
     return redirect(url_for('users.show', username = username))

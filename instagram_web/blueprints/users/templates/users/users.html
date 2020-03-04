@@ -29,7 +29,7 @@
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
-                                        <form action="{{url_for('users.upload_img')}}" method="POST"
+                                        <form action="{{url_for('users.upload_my_image',username = current_user.name)}}" method="POST"
                                             enctype="multipart/form-data">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                                             <div class="modal-body">
