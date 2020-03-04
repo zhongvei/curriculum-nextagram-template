@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash
 from werkzeug.utils import secure_filename
 
 from flask_login import login_user, current_user, login_required, current_user
-from util.helpers import *
+from instagram_web.util.helpers import upload_file_to_s3
 
 
 users_blueprint = Blueprint('users',
@@ -36,9 +36,10 @@ def show(username):
     user = User.get_or_none(User.name == username)
     return render_template('users/users.html', user=user)
 
-@users_blueprint.route('/', methods=["GET"])
+@users_blueprint.route('/index', methods=["GET"])
 def index():
-    return "USERS"
+    users = User().select()
+    return render_template('/users/index.html',users = users)
 
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
@@ -85,13 +86,4 @@ def upload_img():
         return redirect("/")
     return render_template('/users/profile.html')
 
-@users_blueprint.route('/<username>/upload_my_image', methods= ['POST'])
-@login_required
-def upload_my_image(username):
-    file = request.files["user_file"]
-    user = User.get_or_none(User.id == current_user.id)
-    image = Image(image_path = file.filename, user_id = user.id)
-    upload_file_to_s3(file)
-    image.save()
-    flash(u'Image saved successfully!' ,'success')
-    return redirect(url_for('users.show', username = username))
+

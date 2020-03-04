@@ -54,8 +54,8 @@ def create(img_id):
         #mailgun
         # send_simple_message(amount = amount, sender = current_user.name, reciever = user.name)
         flash(u'Donation is made','success')
-        return redirect(url_for('home'))
+        return redirect(url_for('users.index'))
 
     else:
         flash(u'Donation not successfully made, please check the amount of your donation','warning')
-        return redirect(url_for('home'))
+        return redirect(url_for('users.index'))

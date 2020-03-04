@@ -13,11 +13,11 @@ class Config(object):
     S3_SECRET                 = os.environ.get("S3_SECRET_ACCESS_KEY")
     S3_LOCATION               = 'http://{}.s3.amazonaws.com/'.format(S3_BUCKET)
 
-
-
 class ProductionConfig(Config):
     DEBUG = False
     ASSETS_DEBUG = False
+    GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+    GOOGLE_CLIENT_SERVER = os.getenv('GOOGLE_CLIENT_SERVER')
 
 
 class StagingConfig(Config):
@@ -30,10 +30,14 @@ class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
     ASSETS_DEBUG = False
+    GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+    GOOGLE_CLIENT_SERVER = os.getenv('GOOGLE_CLIENT_SERVER')
 
 class TestingConfig(Config):
     TESTING = True
     DEBUG = True
     ASSETS_DEBUG = True
 
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
+GOOGLE_CLIENT_SERVER = os.getenv('GOOGLE_CLIENT_SERVER')
 
