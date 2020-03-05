@@ -11,7 +11,8 @@
                             <div class="row">
                                 <div class="col-12 col-sm-auto mb-3">
                                     <img src="{{current_user.profile_image_url()}}" alt="..." class="img-thumbnail"
-                                        style="width: 150px; height: 150px;">
+                                    id = 'thumbnail'
+                                        >
                                 </div>
                                 <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                                     <div class="text-center text-sm-left mb-2 mb-sm-0">
@@ -30,7 +31,7 @@
                                 role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <!-- stlying my modal here -->
-                                    <div class="modal-content" style="background-color: aqua;">
+                                    <div class="modal-content" >
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="staticBackdropLabel">Modal title
                                             </h5>
@@ -44,8 +45,12 @@
                                             <div class="modal-body">
                                                 <label>Select a new profile picture</label>
                                                 <br></br>
-                                                <input type="file" name="user_file" style="background-color: gold;">
+                                                <input type="file" name="user_file" >
                                             </div>
+                                            <div class="modal-body">
+                                                <img src="" height="200" alt="Image preview...">
+                                                <p>hello</p>
+                                            </div>                                           
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
                                                     data-dismiss="modal">Close</button>

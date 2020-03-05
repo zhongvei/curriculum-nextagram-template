@@ -2,9 +2,9 @@
 
 {% block content %}
 <div class="container">
-    <div class="card" style="width: 18rem; margin: 20vh auto;box-sizing: border-box;">
-        <div style="display: flex; align-items: center; justify-content: center;margin: 10px auto ;">
-            <img src='{{user.profile_image_url()}}' style="height: 200px; width: 200px; border-radius: 50%; object-fit: cover;"></img>
+    <div class="card mycard">
+        <div class="margin_center">
+            <img class="profile_picture" src='{{user.profile_image_url()}}' ></img>
         </div>
         <div class="card-body">
             <p class="card-text">{{user.name}}</p>
@@ -21,7 +21,7 @@
                                 role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <!-- stlying my modal here -->
-                                    <div class="modal-content" style="background-color: aqua;">
+                                    <div class="modal-content" >
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="staticBackdropLabel">Modal title
                                             </h5>
@@ -35,7 +35,7 @@
                                             <div class="modal-body">
                                                 <label>Select a new profile picture</label>
                                                 <br></br>
-                                                <input type="file" name="user_file" style="background-color: gold;">
+                                                <input type="file" name="user_file" >
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary"
@@ -50,10 +50,19 @@
             {% endif %}
         </div>
     </div>
-    <hr/>
-    <div style="display: flex; flex-flow: row wrap;align-items: center; justify-content: center;margin-bottom: 20px;">
+    <div class="row">
+        <div class="col">
+            <p>Followers</p>
+            <p>Following</p>
+            {% if current_user != user %}
+            <button class='btn btn-primary'>Follow</button>
+            {% endif %}
+        </div>
+    </div>
+    <hr class='line'/>
+    <div class="bottom_center">
     {% for image in user.images %}
-        <img src="{{image.get_url()}}" class="img-thumbnail" style="height: 300px;width: 300px;margin: 20px;">
+        <img src="{{image.get_url()}}" class="img-thumbnail post_images">
     {% endfor %}
     </div>
     <p>{{a}}</p>

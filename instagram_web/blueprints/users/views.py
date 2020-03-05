@@ -38,8 +38,8 @@ def show(username):
 
 @users_blueprint.route('/index', methods=["GET"])
 def index():
-    users = User().select()
-    return render_template('/users/index.html',users = users)
+    images = Image.select().order_by(Image.created_at.desc())
+    return render_template('/users/index.html',images = images)
 
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])

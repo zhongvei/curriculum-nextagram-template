@@ -8,44 +8,19 @@
 {% endblock %}
 
 {% block content %}
- <!-- <div class="container">
-  <h1>Homepage</h1>
-  <div class="container">
-    {% for user in users %}
-    {% for image in user.images %}    
-    <div class="card card-style">
-      <div class="card-header" style="display: flex;flex-flow: row;">
+<div class="homepage page">
+  <div class="container homepage" >
+    <div class="row">
+      <div class="col homepage column" >
         <div>
-          <a href="{{url_for('users.show', username = user.name)}}">
-            <img src="{{user.profile_image_url()}}" alt=""  class = 'rounded-circle'style='height: 40px; width: 40px;object-fit: cover'>
-          </a>
+          <a id='nextagram'class='fa fa-instagram insta' ></a>
         </div>
-        <div style="display: flex;align-items: center;">
-          <p style="margin: auto 10px;">{{user.name}}</p>
+        <div>
+          <h1 class='amazing loading'>Welcome to Nextagram</h1>
         </div>
       </div>
-      <div class="card-body">
-        <h5 class="card-title"></h5>
-        <img src = '{{image.get_url()}}' style="object-fit: cover;max-width:100%;
-        max-height:100%;"></a>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      </div>
-      {% if current_user.is_authenticated %}
-      <div class="card">
-        <div class="card-body">
-          <a href="{{url_for('donations.new', img_id = image.id)}}">
-            <i class="fa fa-money" style="font-size:36px"></i>
-          </a>
-        </div>
-      </div>
-      {% endif %}
     </div>
-    {% endfor %}
-    {% endfor %}
-  </div>
  </div>
+</div>
 
-<style>
-  
-</style> -->
 {% endblock %}
