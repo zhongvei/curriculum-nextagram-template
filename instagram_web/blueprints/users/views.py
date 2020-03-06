@@ -41,7 +41,6 @@ def index():
     images = Image.select().order_by(Image.created_at.desc())
     return render_template('/users/index.html',images = images)
 
-
 @users_blueprint.route('/<id>/edit', methods=['GET'])
 @login_required
 def edit(id):

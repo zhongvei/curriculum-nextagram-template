@@ -15,6 +15,20 @@ class User(BaseModel):
             return AWS_S3_DOMAIN + 'empty.png'
         return AWS_S3_DOMAIN + self.image_path
 
+    def is_following(self, user):
+        from models.followerfollowing import FollowerFollowing
+        if FollowerFollowing.get_or_none((FollowerFollowing.idol_id == user) & (FollowerFollowing.fan_id == self.id)):
+            return True
+        else:
+            return False
+        
+    def is_follower(self,user):
+        from models.followerfollowing import FollowerFollowing
+        if FollowerFollowing.get_or_none((FollowerFollowing.fan_id == user.id) & (FollowerFollowing.user_id == self.id)):
+            return True
+        else:
+            return False
+
     def is_authenticated(self):
         return True
 

@@ -4,9 +4,10 @@ from models.user import User
 
 
 class FollowerFollowing(BaseModel):
-    fan =  pw.ForeignKeyField(Image, backref='idols')
-    idol =  pw.ForeignKeyField(Image, backref='fans')
+    fan =  pw.ForeignKeyField(User, backref='idols')
+    idol =  pw.ForeignKeyField(User, backref='fans')
+    request = pw.BooleanField(default=False)
 
     def validate(self):
-        if fan == idol:
+        if self.fan == self.idol:
             self.errors.append("You can't follow yourself dummy!")

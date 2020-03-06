@@ -152,8 +152,6 @@ footer a {
   transition: 0.5s;
 }
 
-
-
 .logo {
   height: 40px;
   width: 40px;
@@ -197,3 +195,34 @@ a {
   height: auto;
   width: auto;
 }
+
+.follow{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: cornflowerblue 2px solid;
+  border-radius: 10px;
+  margin: 20px 20%;
+}
+
+.username{
+  text-align: center;
+  margin: 0;
+}
+
+.request {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border: darkorange 2px solid;
+  border-radius: 10px;
+  margin: 20px 20%;
+  justify-content: space-between;
+}
+
+.together {
+  display: flex;
+  align-items: center;
+  margin: 0 30px;
+}
+
