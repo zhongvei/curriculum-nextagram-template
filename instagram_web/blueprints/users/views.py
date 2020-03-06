@@ -33,8 +33,11 @@ def create():
     
 @users_blueprint.route('/<username>', methods=["GET"])
 def show(username):
+    from models.followerfollowing import FollowerFollowing
     user = User.get_or_none(User.name == username)
-    return render_template('users/users.html', user=user)
+    follower = FollowerFollowing.select().where((FollowerFollowing.request == True) & (FollowerFollowing.idol_id == user.id))
+    following = FollowerFollowing.select().where((FollowerFollowing.request == True) & (FollowerFollowing.fan_id == user.id))
+    return render_template('users/users.html', user=user, follower = follower, following = following)
 
 @users_blueprint.route('/index', methods=["GET"])
 def index():
@@ -84,5 +87,22 @@ def upload_img():
     else:
         return redirect("/")
     return render_template('/users/profile.html')
+
+@users_blueprint.route('/private',methods = ['POST'])
+@login_required
+def private():
+    user = User.get_or_none(User.id == current_user.id)
+    if not user:
+        flash('No user found.','warning')
+        return redirect(url_for('users.edit', id = current_user.id))
+
+    user.private = True
+
+    if not user.save():
+        flash("Can't change your account to private accound",'warning')
+        return redirect(url_for('users.edit', id = current_user.id))
+
+    flash('Successfully converted into private account','success')
+    return redirect(url_for('users.edit', id = current_user.id))
 
 

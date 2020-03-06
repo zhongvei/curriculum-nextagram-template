@@ -9,6 +9,7 @@ class User(BaseModel):
     name = pw.CharField(unique=True)
     password = pw.CharField()
     image_path = pw.CharField(default = '')
+    private = pw.BooleanField(default=False)
     
     def profile_image_url(self):
         if str(self.image_path) == '':

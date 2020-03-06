@@ -52,7 +52,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <p data-toggle="modal" data-target="#exampleModalCenter1">Followers {{user.fans | length}}</p>
+            <p data-toggle="modal" data-target="#exampleModalCenter1">Followers {{follower | length}}</p>
             <div class="modal fade" id="exampleModalCenter1" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
@@ -70,14 +70,14 @@
                               <img src="{{fan.fan.profile_image_url()}}" alt="..." class="rounded-circle icon">
                             </a>
                           <p class="username">{{fan.fan.name}}</p>
-                      </div>
+                        </div>
                         {% endif %}
                         {% endfor %}
                     </div>
                   </div>
                 </div>
               </div>
-            <p data-toggle="modal" data-target="#exampleModalCenter">Following {{user.idols | length}}</p>              
+            <p data-toggle="modal" data-target="#exampleModalCenter">Following {{following | length}}</p>              
               <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                   <div class="modal-content">
@@ -89,12 +89,14 @@
                     </div>
                     <div class="modal-body">
                         {% for idol in user.idols %}
-                        <div class="border follow">
+                        {% if idol.request %}
+                        <div class="follow">
                             <a href="{{url_for('users.show', username = idol.idol.name)}}">
                                 <img src="{{idol.idol.profile_image_url()}}" alt="..." class="rounded-circle icon">
                               </a>
                             <p class="username">{{idol.idol.name}}</p>
                         </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
                   </div>
